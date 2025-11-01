@@ -12,8 +12,8 @@ export class SuplierService {
     return this.suplierRepository.create(createSuplierDto);
   } 
 
-  findAll(page?: number, limit?: number) {
-    return this.suplierRepository.findAll(page, limit);
+  findAll(page?: number, limit?: number, search?: string) {
+    return this.suplierRepository.findAll(page, limit, search);
   }
 
   findOne(id: number) {

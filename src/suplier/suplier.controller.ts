@@ -13,9 +13,14 @@ export class SuplierController {
   }
 
   @Get()
-  findAll(@Query('page') page = '1', @Query('limit') limit = '10') {
-    return this.suplierService.findAll(+page, +limit);
-  }
+findAll(
+  @Query('page') page = '1',
+  @Query('limit') limit = '10',
+  @Query('search') search?: string, // <-- tambahkan parameter search
+) {
+  return this.suplierService.findAll(+page, +limit, search);
+}
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

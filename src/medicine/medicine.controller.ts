@@ -12,10 +12,14 @@ export class MedicineController {
     return this.medicineService.create(createMedicineDto);
   }
 
-  @Get()
-  findAll(@Query('page') page = '1', @Query('limit') limit = '10') {
-    return this.medicineService.findAll(+page, +limit);
-  }
+ @Get()
+ findAll(
+  @Query('page') page ='1',
+  @Query('limit') limit ='10',
+  @Query('search') search?:string,
+ ){
+  return this.medicineService.findAll(+page,+limit,search)
+ }
 
 
   @Get(':id')

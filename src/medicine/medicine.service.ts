@@ -11,8 +11,8 @@ export class MedicineService {
     return this.medicineRepository.create(createMedicineDto);
   }
   
-  findAll(page?: number, limit?: number) {
-    return this.medicineRepository.findAll(page, limit);
+  findAll(page?: number, limit?: number, search?:string) {
+    return this.medicineRepository.findAll(page, limit, search);
   }
 
   findOne(id: number) {

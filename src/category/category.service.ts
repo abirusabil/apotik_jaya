@@ -11,8 +11,8 @@ export class CategoryService {
   create(createCategoryDto: CreateCategoryDto) {
     return this.repo.create(createCategoryDto);
   }   
-  findAll(page?: number, limit?: number) {
-    return this.repo.findAll(page, limit);
+  findAll(page?: number, limit?: number , search?:string) {
+    return this.repo.findAll(page, limit, search);
   }
   findOne(id: number) {
     return this.repo.findOne(id);

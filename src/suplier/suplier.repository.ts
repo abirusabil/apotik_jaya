@@ -4,7 +4,7 @@ import { CreateSuplierDto } from "./dto/create-suplier.dto";
 
 @Injectable()
 export class SuplierRepository {
-    constructor(private prisma:PrismaService){}
+    constructor(private prisma: PrismaService) { }
 
     create(data: CreateSuplierDto) {
         return this.prisma.suplier.create({
@@ -12,28 +12,44 @@ export class SuplierRepository {
         });
     }
 
-    findAll(page = 1, limit = 10) {
+    async findAll(page = 1, limit = 10, search?: string) {
         const skip = (page - 1) * limit;
-        return Promise.all([
+
+        // Filter data hanya yang belum dihapus
+        const where: any = { deletedAt: null };
+
+        // Tambahkan filter pencarian jika ada input search
+        if (search) {
+            where.OR = [
+                { name: { contains: search, mode: 'insensitive' } },
+                { email: { contains: search, mode: 'insensitive' } }, // opsional
+            ];
+        }
+
+        // Jalankan query paralel untuk efisiensi
+        const [data, total] = await Promise.all([
             this.prisma.suplier.findMany({
-                where: { deletedAt: null },
+                where,
                 orderBy: { id: 'asc' },
                 skip,
                 take: limit,
             }),
-            this.prisma.suplier.count({
-                where: { deletedAt: null },
-            }),
-        ]).then(([data, total]) => ({
+            this.prisma.suplier.count({ where }),
+        ]);
+
+        // Kembalikan hasil dengan metadata pagination
+        return {
             data,
             meta: {
                 total,
-                page,   
+                page,
                 limit,
                 totalPages: Math.ceil(total / limit),
             },
-        }));
+        };
     }
+
+
 
     findOne(id: number) {
         return this.prisma.suplier.findFirst({
@@ -54,5 +70,5 @@ export class SuplierRepository {
             data: { deletedAt: new Date() },
         });
     }
-    
+
 }
